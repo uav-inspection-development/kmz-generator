@@ -1,0 +1,10 @@
+server:
+  port: 6666
+
+spring:
+  application:
+    name: dj-uav
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB

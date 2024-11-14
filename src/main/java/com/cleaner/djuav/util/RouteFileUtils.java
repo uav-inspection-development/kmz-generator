@@ -47,6 +47,7 @@ public class RouteFileUtils {
         xStream.alias("kml", KmlInfo.class);
         xStream.processAnnotations(KmlInfo.class);
         xStream.autodetectAnnotations(true);
+        xStream.ignoreUnknownElements();
         xStream.addImplicitCollection(KmlActionGroup.class, "action");
         return (KmlInfo) xStream.fromXML(inputStream);
     }

@@ -23,10 +23,10 @@ public class RoutePointReq implements Serializable {
      */
     private Double latitude;
 
-//    /**
-//     * 高度
-//     */
-//    private Double height;
+    /**
+     * 高度
+     */
+    private Double height;
 
 
     /**

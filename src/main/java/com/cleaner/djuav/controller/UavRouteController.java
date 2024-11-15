@@ -10,6 +10,7 @@ import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,7 +30,7 @@ public class UavRouteController {
      * 解析kmz文件
      * @param file
      */
-    @GetMapping("/parseKmz")
+    @PostMapping("/parseKmz")
     public void test(@RequestParam("file") MultipartFile file) {
         try (ArchiveInputStream archiveInputStream = new ZipArchiveInputStream(file.getInputStream())) {
             ArchiveEntry entry;

@@ -7,20 +7,23 @@ import lombok.Data;
 @XStreamAlias("Placemark")
 public class KmlPlacemark {
 
+    @XStreamAlias("wpml:isRisky")
+    private String isRisky;
+
     @XStreamAlias("Point")
     private KmlPoint kmlPoint;
 
     @XStreamAlias("wpml:index")
     private String index;
 
-    @XStreamAlias("wpml:height")
-    private String height;
+    @XStreamAlias("wpml:useGlobalHeight")
+    private String useGlobalHeight;
 
     @XStreamAlias("wpml:ellipsoidHeight")
     private String ellipsoidHeight;
 
-    @XStreamAlias("wpml:useGlobalHeight")
-    private String useGlobalHeight;
+    @XStreamAlias("wpml:height")
+    private String height;
 
     @XStreamAlias("wpml:useGlobalSpeed")
     private String useGlobalSpeed;
@@ -31,20 +34,17 @@ public class KmlPlacemark {
     @XStreamAlias("wpml:useGlobalHeadingParam")
     private String useGlobalHeadingParam;
 
-    @XStreamAlias("wpml:useGlobalTurnParam")
-    private String useGlobalTurnParam;
-
-    @XStreamAlias("wpml:useStraightLine")
-    private String useStraightLine;
-
-    @XStreamAlias("wpml:isRisky")
-    private String isRisky;
-
     @XStreamAlias("wpml:waypointHeadingParam")
     private KmlWaypointHeadingParam waypointHeadingParam;
 
+    @XStreamAlias("wpml:useGlobalTurnParam")
+    private String useGlobalTurnParam;
+
     @XStreamAlias("wpml:waypointTurnParam")
     private KmlWaypointTurnParam waypointTurnParam;
+
+    @XStreamAlias("wpml:useStraightLine")
+    private String useStraightLine;
 
     @XStreamAlias("wpml:gimbalPitchAngle")
     private String gimbalPitchAngle;
@@ -56,7 +56,7 @@ public class KmlPlacemark {
     @XStreamAlias("wpml:executeHeight")
     private String executeHeight;
 
-    @XStreamAlias("wpml:waypointGimbalHeadingParam")
-    private KmlWaypointGimbalHeadingParam waypointGimbalHeadingParam ;
+//    @XStreamAlias("wpml:waypointGimbalHeadingParam")
+//    private KmlWaypointGimbalHeadingParam waypointGimbalHeadingParam;
 
 }

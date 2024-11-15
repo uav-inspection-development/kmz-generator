@@ -15,32 +15,30 @@ public class KmlFolder {
     @XStreamAlias("wpml:templateId")
     private String templateId;
 
-    @XStreamAlias("wpml:waylineCoordinateSysParam")
-    private KmlWayLineCoordinateSysParam waylineCoordinateSysParam;
-
     @XStreamAlias("wpml:autoFlightSpeed")
     private String autoFlightSpeed;
 
-    @XStreamAlias("wpml:globalHeight")
-    private String globalHeight;
+    @XStreamAlias("wpml:waylineCoordinateSysParam")
+    private KmlWayLineCoordinateSysParam waylineCoordinateSysParam;
 
-    @XStreamAlias("wpml:caliFlightEnable")
-    private String caliFlightEnable;
+    @XStreamAlias("wpml:payloadParam")
+    private KmlPayloadParam payloadParam;
 
-    @XStreamAlias("wpml:gimbalPitchMode")
-    private String gimbalPitchMode;
-
-    @XStreamAlias("wpml:globalWaypointHeadingParam")
-    private KmlGlobalWaypointHeadingParam globalWaypointHeadingParam;
-
+    // 以下为航点飞行模板元素
     @XStreamAlias("wpml:globalWaypointTurnMode")
     private String globalWaypointTurnMode;
 
     @XStreamAlias("wpml:globalUseStraightLine")
     private String globalUseStraightLine;
 
-    @XStreamAlias("wpml:payloadParam")
-    private KmlPayloadParam payloadParam;
+    @XStreamAlias("wpml:gimbalPitchMode")
+    private String gimbalPitchMode;
+
+    @XStreamAlias("wpml:globalHeight")
+    private String globalHeight;
+
+    @XStreamAlias("wpml:globalWaypointHeadingParam")
+    private KmlGlobalWaypointHeadingParam globalWaypointHeadingParam;
 
     @XStreamImplicit(itemFieldName = "Placemark")
     private List<KmlPlacemark> placemarkList;
@@ -52,11 +50,7 @@ public class KmlFolder {
     @XStreamAlias("wpml:waylineId")
     private String waylineId;
 
-    @XStreamAlias("wpml:distance")
-    private String distance;
-
-    @XStreamAlias("wpml:duration")
-    private String duration;
-
+    @XStreamAlias("wpml:startActionGroup")
+    private KmlActionGroup actionGroup;
 
 }

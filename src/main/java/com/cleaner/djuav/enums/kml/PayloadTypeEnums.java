@@ -1,7 +1,7 @@
 package com.cleaner.djuav.enums.kml;
 
 /**
- * wpml:actionActuatorFunc	 动作类型
+ * wpml:payloadEnumValue	 负载机型主类型
  */
 public enum PayloadTypeEnums {
 

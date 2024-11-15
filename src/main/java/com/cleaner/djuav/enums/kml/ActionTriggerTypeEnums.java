@@ -1,7 +1,7 @@
 package com.cleaner.djuav.enums.kml;
 
 /**
- * wpml:positioningType	 经纬度与高度数据源
+ * wpml:actionTriggerType	 动作触发器类型
  */
 public enum ActionTriggerTypeEnums {
 

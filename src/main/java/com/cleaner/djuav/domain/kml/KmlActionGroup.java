@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 @XStreamAlias("wpml:actionGroup")
 public class KmlActionGroup {
+
     @XStreamAlias("wpml:actionGroupId")
     private String actionGroupId;
 

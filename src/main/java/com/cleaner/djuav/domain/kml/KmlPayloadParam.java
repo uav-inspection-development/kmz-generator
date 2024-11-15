@@ -38,5 +38,4 @@ public class KmlPayloadParam {
     private String imageFormat;
 
 
-
 }

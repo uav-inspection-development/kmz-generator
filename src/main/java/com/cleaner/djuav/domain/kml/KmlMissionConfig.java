@@ -28,12 +28,16 @@ public class KmlMissionConfig {
     @XStreamAlias("wpml:globalRTHHeight")
     private String globalRTHHeight;
 
+    @XStreamAlias("wpml:takeOffRefPoint")
+    private String takeOffRefPoint;
+
+    @XStreamAlias("wpml:takeOffRefPointAGLHeight")
+    private String takeOffRefPointAGLHeight;
+
     @XStreamAlias("wpml:droneInfo")
     private KmlDroneInfo droneInfo;
 
     @XStreamAlias("wpml:payloadInfo")
     private KmlPayloadInfo payloadInfo;
 
-    @XStreamAlias("wpml:takeOffRefPoint")
-    private String takeOffRefPoint;
 }

@@ -1,6 +1,5 @@
 package com.cleaner.djuav.util;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -13,11 +12,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.apache.commons.lang3.StringUtils;
 
-import java.awt.*;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,35 +69,29 @@ public class RouteFileUtils {
             zipOutputStream.setLevel(0); // 0 表示不压缩，存储方式
 
             // 创建 wpmz 目录中的 template.kml 文件条目
-            ZipEntry kmlEntry = new ZipEntry("wpmz/template.kml");
-            zipOutputStream.putNextEntry(kmlEntry);
-            // 将内容写入 ZIP 条目
-            try (ByteArrayInputStream inputStream = new ByteArrayInputStream(kml.getBytes(StandardCharsets.UTF_8))) {
-                byte[] buffer = new byte[1024];
-                int length;
-                while ((length = inputStream.read(buffer)) >= 0) {
-                    zipOutputStream.write(buffer, 0, length);
-                }
-            }
-            zipOutputStream.closeEntry(); // 关闭条目
+            buildZipFile("wpmz/template.kml", zipOutputStream, kml);
 
             // 创建 wpmz 目录中的 waylines.wpml 文件条目
-            ZipEntry wpmlEntry = new ZipEntry("wpmz/waylines.wpml");
-            zipOutputStream.putNextEntry(wpmlEntry);
-            // 将内容写入 ZIP 条目
-            try (ByteArrayInputStream inputStream = new ByteArrayInputStream(wpml.getBytes(StandardCharsets.UTF_8))) {
-                byte[] buffer = new byte[1024];
-                int length;
-                while ((length = inputStream.read(buffer)) >= 0) {
-                    zipOutputStream.write(buffer, 0, length);
-                }
-            }
-            zipOutputStream.closeEntry(); // 关闭条目
+            buildZipFile("wpmz/waylines.wpml", zipOutputStream, wpml);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return LOCAL_KMZ_FILE_PATH + fileName + ".kmz";
+    }
+
+    private static void buildZipFile(String name, ZipOutputStream zipOutputStream, String content) throws IOException {
+        ZipEntry kmlEntry = new ZipEntry(name);
+        zipOutputStream.putNextEntry(kmlEntry);
+        // 将内容写入 ZIP 条目
+        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8))) {
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) >= 0) {
+                zipOutputStream.write(buffer, 0, length);
+            }
+        }
+        zipOutputStream.closeEntry(); // 关闭条目
     }
 
 
@@ -147,9 +136,9 @@ public class RouteFileUtils {
     public static KmlDroneInfo buildKmlDroneInfo(Integer droneType, Integer subDroneType) {
         KmlDroneInfo kmlDroneInfo = new KmlDroneInfo();
         kmlDroneInfo.setDroneEnumValue(String.valueOf(droneType));
-        if (Objects.equals(droneType, DroneTypeEnums.M30_M30T.getValue()) ||
-                Objects.equals(droneType, DroneTypeEnums.M3D_M3TD.getValue()) ||
-                Objects.equals(droneType, DroneTypeEnums.M3E_M3T_M3M.getValue())) {
+        if (Objects.equals(droneType, DroneEnumValueEnums.M30_M30T.getValue()) ||
+                Objects.equals(droneType, DroneEnumValueEnums.M3D_M3TD.getValue()) ||
+                Objects.equals(droneType, DroneEnumValueEnums.M3E_M3T_M3M.getValue())) {
             kmlDroneInfo.setDroneSubEnumValue(String.valueOf(subDroneType));
         }
         return kmlDroneInfo;
@@ -198,7 +187,7 @@ public class RouteFileUtils {
             routePointReq.setLongitude(123.23);
             routePointReq.setLatitude(45.45);
             routePointReq.setActions(kmlActionList);
-            kmlPlacemarkList.add(buildKmlPlacemark(routePointReq, kmlParams,fileType));
+            kmlPlacemarkList.add(buildKmlPlacemark(routePointReq, kmlParams, fileType));
         }
         kmlFolder.setPlacemarkList(kmlPlacemarkList);
         return kmlFolder;
@@ -251,7 +240,7 @@ public class RouteFileUtils {
 
     }
 
-    public static KmlPlacemark buildKmlPlacemark(RoutePointReq routePointReq, KmlParams kmlParams,String fileType) {
+    public static KmlPlacemark buildKmlPlacemark(RoutePointReq routePointReq, KmlParams kmlParams, String fileType) {
         KmlPlacemark kmlPlacemark = new KmlPlacemark();
         kmlPlacemark.setIsRisky("0");
         // 航点坐标系转换

@@ -19,7 +19,5 @@ public class KmlGlobalWaypointHeadingParam {
     @XStreamAlias("wpml:waypointHeadingPathMode")
     private String waypointHeadingPathMode;
 
-    @XStreamAlias("wpml:waypointHeadingPoiIndex")
-    private String waypointHeadingPoiIndex;
 
 }

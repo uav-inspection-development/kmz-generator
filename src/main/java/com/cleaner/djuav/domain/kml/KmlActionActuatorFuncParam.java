@@ -7,7 +7,51 @@ import lombok.Data;
 @XStreamAlias("wpml:actionActuatorFuncParam")
 public class KmlActionActuatorFuncParam {
 
-    // gimbalRotate
+    // takePhoto & startRecord & stopRecord
+
+    @XStreamAlias("wpml:payloadPositionIndex")
+    private String payloadPositionIndex;
+
+    @XStreamAlias("wpml:fileSuffix")
+    private String fileSuffix;
+
+    @XStreamAlias("wpml:payloadLensIndex")
+    private String payloadLensIndex;
+
+    @XStreamAlias("wpml:useGlobalPayloadLensIndex")
+    private String useGlobalPayloadLensIndex;
+
+    // focus
+
+    @XStreamAlias("wpml:isPointFocus")
+    private String isPointFocus;
+
+    @XStreamAlias("wpml:focusX")
+    private String focusX;
+
+    @XStreamAlias("wpml:focusY")
+    private String focusY;
+
+    @XStreamAlias("wpml:focusRegionWidth")
+    private String focusRegionWidth;
+
+    @XStreamAlias("wpml:focusRegionHeight")
+    private String focusRegionHeight;
+
+    @XStreamAlias("wpml:isInfiniteFocus")
+    private String isInfiniteFocus;
+
+    // zoom
+
+    @XStreamAlias("wpml:focalLength")
+    private String focalLength;
+
+    // customDirName
+
+    @XStreamAlias("wpml:directoryName")
+    private String directoryName;
+
+    // gimbalRotate & gimbalEvenlyRotate
 
     @XStreamAlias("wpml:gimbalHeadingYawBase")
     private String gimbalHeadingYawBase;
@@ -39,21 +83,6 @@ public class KmlActionActuatorFuncParam {
     @XStreamAlias("wpml:gimbalRotateTime")
     private String gimbalRotateTime;
 
-    // takePhoto
-
-    @XStreamAlias("wpml:payloadPositionIndex")
-    private String payloadPositionIndex;
-
-    @XStreamAlias("wpml:fileSuffix")
-    private String fileSuffix;
-
-    @XStreamAlias("wpml:payloadLensIndex")
-    private String payloadLensIndex;
-
-    @XStreamAlias("wpml:useGlobalPayloadLensIndex")
-    private String useGlobalPayloadLensIndex;
-
-
     // rotateYaw
 
     @XStreamAlias("wpml:aircraftHeading")
@@ -67,8 +96,66 @@ public class KmlActionActuatorFuncParam {
     @XStreamAlias("wpml:hoverTime")
     private String hoverTime;
 
-    // zoom
+    // orientedShoot
 
-    @XStreamAlias("wpml:focalLength")
-    private String focalLength;
+    @XStreamAlias("wpml:accurateFrameValid")
+    private String accurateFrameValid;
+
+    @XStreamAlias("wpml:targetAngle")
+    private String targetAngle;
+
+    @XStreamAlias("wpml:actionUUID")
+    private String actionUUID;
+
+    @XStreamAlias("wpml:imageWidth")
+    private String imageWidth;
+
+    @XStreamAlias("wpml:imageHeight")
+    private String imageHeight;
+
+    @XStreamAlias("wpml:AFPos")
+    private String AFPos;
+
+    @XStreamAlias("wpml:gimbalPort")
+    private String gimbalPort;
+
+    @XStreamAlias("wpml:orientedCameraType")
+    private String orientedCameraType;
+
+    @XStreamAlias("wpml:orientedFilePath")
+    private String orientedFilePath;
+
+    @XStreamAlias("wpml:orientedFileMD5")
+    private String orientedFileMD5;
+
+    @XStreamAlias("wpml:orientedFileSize")
+    private String orientedFileSize;
+
+    @XStreamAlias("wpml:orientedFileSuffix")
+    private String orientedFileSuffix;
+
+    @XStreamAlias("wpml:orientedCameraApertue")
+    private String orientedCameraApertue;
+
+    @XStreamAlias("wpml:orientedCameraLuminance")
+    private String orientedCameraLuminance;
+
+    @XStreamAlias("wpml:orientedCameraShutterTime")
+    private String orientedCameraShutterTime;
+
+    @XStreamAlias("wpml:orientedCameraISO")
+    private String orientedCameraISO;
+
+    @XStreamAlias("wpml:orientedPhotoMode")
+    private String orientedPhotoMode;
+
+    // panoShot
+
+    @XStreamAlias("wpml:panoShotSubMode")
+    private String panoShotSubMode;
+
+    // recordPointCloud
+
+    @XStreamAlias("wpml:recordPointCloudOperate")
+    private String recordPointCloudOperate;
 }

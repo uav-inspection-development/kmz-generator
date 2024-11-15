@@ -1,7 +1,7 @@
 package com.cleaner.djuav.enums.kml;
 
 /**
- * wpml:heightMode	 航点高程参考平面
+ * wpml:globalWaypointTurnMode	 全局航点类型（全局航点转弯模式）
  */
 public enum GlobalWaypointTurnModeEnums {
 

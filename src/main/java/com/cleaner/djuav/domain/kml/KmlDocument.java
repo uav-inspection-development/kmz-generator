@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @XStreamAlias("Document")
 public class KmlDocument {
+
     @XStreamAlias("wpml:author")
     private String author;
 

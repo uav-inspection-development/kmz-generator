@@ -6,6 +6,14 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Gps {
-    private double wgLat; // 纬度
-    private double wgLon; // 经度
+
+    /**
+     * 经度
+     */
+    private double wgLon;
+
+    /**
+     * 纬度
+     */
+    private double wgLat;
 }

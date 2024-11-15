@@ -1,9 +1,9 @@
 package com.cleaner.djuav.enums.kml;
 
 /**
- * wpml:actionActuatorFunc	 动作类型
+ * wpml:droneEnumValue	 飞行器机型主类型
  */
-public enum DroneTypeEnums {
+public enum DroneEnumValueEnums {
 
     M350_RTK(89, "M350 RTK"),
     M300_RTK(60, "M300 RTK"),
@@ -14,7 +14,7 @@ public enum DroneTypeEnums {
     private Integer value;
     private String description;
 
-    DroneTypeEnums(Integer value, String description) {
+    DroneEnumValueEnums(Integer value, String description) {
         this.value = value;
         this.description = description;
     }

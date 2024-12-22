@@ -9,7 +9,7 @@ public class PointActionReq implements Serializable {
     /**
      * 动作编号
      */
-    private Integer actionIndex;
+        private Integer actionIndex;
 
     /**
      * 飞行器悬停等待时间

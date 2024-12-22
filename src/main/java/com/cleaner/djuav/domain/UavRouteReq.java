@@ -1,15 +1,17 @@
-package com.cleaner.djuav.domain.kml;
+package com.cleaner.djuav.domain;
 
-import com.cleaner.djuav.domain.RoutePointReq;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
- * 航线文件
- */
+ * Author:songjian
+ * Date: 2024/12/22 10:46
+ **/
 @Data
-public class KmlParams {
+public class UavRouteReq implements Serializable {
+
     /**
      * 无人机类型
      */
@@ -31,6 +33,11 @@ public class KmlParams {
     private Integer payloadPosition;
 
     /**
+     * 负载图片存储类型
+     */
+    private String imageFormat;
+
+    /**
      * 航线结束动作
      */
     private String finishAction;
@@ -40,20 +47,20 @@ public class KmlParams {
      */
     private String exitOnRcLostAction;
 
-//    /**
-//     * 参考起飞点
-//     */
-//    private String takeOffRefPoint;
+    /**
+     * 全局航线高度
+     */
+    private Double globalHeight;
+
+    /**
+     * 全局航线飞行速度
+     */
+    private Double autoFlightSpeed;
 
     /**
      * 全局航点转弯模式
      */
     private String globalWaypointTurnMode;
-
-    /**
-     * 全局航线高度
-     */
-    private Double globalHeight;
 
     /**
      * 全局飞行器偏航角模式
@@ -76,18 +83,8 @@ public class KmlParams {
     private String gimbalPitchMode;
 
     /**
-     * 全局航线飞行速度
-     */
-    private Double autoFlightSpeed;
-
-    /**
-     * 负载图片存储类型
-     */
-    private String imageFormat;
-
-    /**
      * 航点列表
      */
     private List<RoutePointReq> routePointList;
-}
 
+}

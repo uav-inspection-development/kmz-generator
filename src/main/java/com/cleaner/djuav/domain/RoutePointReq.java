@@ -28,6 +28,26 @@ public class RoutePointReq implements Serializable {
      */
     private Double height;
 
+    /**
+     * 飞行速度
+     */
+    private Double speed;
+
+    /**
+     * 航点偏航角
+     */
+    private WaypointHeadingReq waypointHeadingReq;
+
+    /**
+     * 航点转弯模式
+     */
+    private WaypointTurnReq waypointTurnReq;
+
+    /**
+     * 航点云台俯仰角
+     */
+    private Double gimbalPitchAngle;
+
 
     /**
      * 航点动作列表

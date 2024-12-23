@@ -58,24 +58,14 @@ public class UavRouteReq implements Serializable {
     private Double autoFlightSpeed;
 
     /**
+     * 全局偏航角模式
+     */
+    private WaypointHeadingReq waypointHeadingReq;
+
+    /**
      * 全局航点转弯模式
      */
-    private String globalWaypointTurnMode;
-
-    /**
-     * 全局飞行器偏航角模式
-     */
-    private String waypointHeadingMode;
-
-    /**
-     * 全局飞行器偏航角度
-     */
-    private Double waypointHeadingAngle;
-
-    /**
-     * 兴趣点
-     */
-    private String waypointPoiPoint;
+    private WaypointTurnReq waypointTurnReq;
 
     /**
      * 云台俯仰角控制模式

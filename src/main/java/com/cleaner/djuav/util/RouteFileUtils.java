@@ -7,6 +7,7 @@ import com.cleaner.djuav.constant.FileTypeConstants;
 import com.cleaner.djuav.domain.PointActionReq;
 import com.cleaner.djuav.domain.RoutePointReq;
 import com.cleaner.djuav.domain.WaypointHeadingReq;
+import com.cleaner.djuav.domain.WaypointTurnReq;
 import com.cleaner.djuav.domain.kml.*;
 import com.cleaner.djuav.enums.kml.*;
 import com.thoughtworks.xstream.XStream;
@@ -176,14 +177,16 @@ public class RouteFileUtils {
         }
         // 航点类型模板航线配置
         if (StringUtils.equals(kmlFolder.getTemplateType(), TemplateTypeEnums.WAYPOINT.getValue())) {
-            kmlFolder.setGlobalWaypointTurnMode(kmlParams.getGlobalWaypointTurnMode());
-            if (StringUtils.equals(kmlParams.getGlobalWaypointTurnMode(), GlobalWaypointTurnModeEnums.TO_POINT_AND_STOP_WITH_CONTINUITY_CURVATURE.getValue()) ||
-                    StringUtils.equals(kmlParams.getGlobalWaypointTurnMode(), GlobalWaypointTurnModeEnums.TO_POINT_AND_PASS_WITH_CONTINUITY_CURVATURE.getValue())) {
+            WaypointTurnReq waypointTurnReq = kmlParams.getWaypointTurnReq();
+            kmlFolder.setGlobalWaypointTurnMode(waypointTurnReq.getWaypointTurnMode());
+            if (StringUtils.equals(waypointTurnReq.getWaypointTurnMode(), GlobalWaypointTurnModeEnums.TO_POINT_AND_STOP_WITH_CONTINUITY_CURVATURE.getValue()) ||
+                    StringUtils.equals(waypointTurnReq.getWaypointTurnMode(), GlobalWaypointTurnModeEnums.TO_POINT_AND_PASS_WITH_CONTINUITY_CURVATURE.getValue())) {
                 kmlFolder.setGlobalUseStraightLine("1");
             }
             kmlFolder.setGimbalPitchMode(kmlParams.getGimbalPitchMode());
             kmlFolder.setGlobalHeight(String.valueOf(kmlParams.getGlobalHeight()));
-            kmlFolder.setGlobalWaypointHeadingParam(buildKmlGlobalWaypointHeadingParam(kmlParams.getWaypointHeadingMode(), kmlParams.getWaypointHeadingAngle(), kmlParams.getWaypointPoiPoint()));
+            WaypointHeadingReq waypointHeadingReq = kmlParams.getWaypointHeadingReq();
+            kmlFolder.setGlobalWaypointHeadingParam(buildKmlGlobalWaypointHeadingParam(waypointHeadingReq.getWaypointHeadingMode(), waypointHeadingReq.getWaypointHeadingAngle(), waypointHeadingReq.getWaypointPoiPoint()));
         }
         // 构建航点
         List<RoutePointReq> routePointList = kmlParams.getRoutePointList();
@@ -250,6 +253,76 @@ public class RouteFileUtils {
         kmlPlacemark.setKmlPoint(buildKmlPoint(String.valueOf(routePointReq.getLongitude()), String.valueOf(routePointReq.getLatitude())));
         kmlPlacemark.setIndex(String.valueOf(routePointReq.getRoutePointIndex()));
 
+        handleHeight(routePointReq, kmlParams, fileType, kmlPlacemark);
+        handleSpeed(routePointReq, kmlParams, fileType, kmlPlacemark);
+        handleWaypointHeadingParam(routePointReq, kmlParams, fileType, kmlPlacemark);
+        handleWaypointTurnParam(routePointReq, kmlParams, fileType, kmlPlacemark);
+        if (StringUtils.equals(fileType, FileTypeConstants.KML)) {
+            if (ObjectUtil.isNotEmpty(routePointReq.getGimbalPitchAngle()) && StringUtils.equals(kmlParams.getGimbalPitchMode(), GimbalPitchModeEnums.USE_POINT_SETTING.getValue())) {
+                kmlPlacemark.setGimbalPitchAngle(String.valueOf(routePointReq.getGimbalPitchAngle()));
+            }
+        }
+        if (CollectionUtil.isNotEmpty(routePointReq.getActions())) {
+            kmlPlacemark.setActionGroup(buildKmlActionGroup(routePointReq, kmlParams));
+        }
+        return kmlPlacemark;
+    }
+
+    private static void handleWaypointTurnParam(RoutePointReq routePointReq, KmlParams kmlParams, String fileType, KmlPlacemark kmlPlacemark) {
+        WaypointTurnReq waypointTurnReq = routePointReq.getWaypointTurnReq();
+        if (ObjectUtil.isNotEmpty(waypointTurnReq)) {
+            if (StringUtils.equals(fileType, FileTypeConstants.KML)) {
+                kmlPlacemark.setUseGlobalTurnParam("0");
+            }
+            kmlPlacemark.setWaypointTurnParam(buildKmlWaypointTurnParam(waypointTurnReq.getWaypointTurnMode(), waypointTurnReq.getWaypointTurnDampingDist(), waypointTurnReq.getUseStraightLine()));
+            if (ObjectUtil.isNotEmpty(waypointTurnReq.getUseStraightLine())) {
+                kmlPlacemark.setUseStraightLine(String.valueOf(waypointTurnReq.getUseStraightLine()));
+            }
+        } else {
+            if (StringUtils.equals(fileType, FileTypeConstants.KML)) {
+                kmlPlacemark.setUseGlobalTurnParam("1");
+            } else if (StringUtils.equals(fileType, FileTypeConstants.WPML)) {
+                WaypointTurnReq globalWaypoint = kmlParams.getWaypointTurnReq();
+                kmlPlacemark.setWaypointTurnParam(buildKmlWaypointTurnParam(globalWaypoint.getWaypointTurnMode(), globalWaypoint.getWaypointTurnDampingDist(), globalWaypoint.getUseStraightLine()));
+            }
+        }
+    }
+
+    private static void handleWaypointHeadingParam(RoutePointReq routePointReq, KmlParams kmlParams, String fileType, KmlPlacemark kmlPlacemark) {
+        WaypointHeadingReq waypointHeadingReq = routePointReq.getWaypointHeadingReq();
+        if (ObjectUtil.isNotEmpty(waypointHeadingReq)) {
+            if (StringUtils.equals(fileType, FileTypeConstants.KML)) {
+                kmlPlacemark.setUseGlobalHeadingParam("0");
+            }
+            kmlPlacemark.setWaypointHeadingParam(buildKmlWaypointHeadingParam(waypointHeadingReq.getWaypointHeadingMode(), waypointHeadingReq.getWaypointHeadingAngle(), waypointHeadingReq.getWaypointPoiPoint()));
+        } else {
+            if (StringUtils.equals(fileType, FileTypeConstants.KML)) {
+                kmlPlacemark.setUseGlobalHeadingParam("1");
+            } else if (StringUtils.equals(fileType, FileTypeConstants.WPML)) {
+                WaypointHeadingReq globalWaypointHeading = kmlParams.getWaypointHeadingReq();
+                kmlPlacemark.setWaypointHeadingParam(buildKmlWaypointHeadingParam(globalWaypointHeading.getWaypointHeadingMode(), globalWaypointHeading.getWaypointHeadingAngle(), globalWaypointHeading.getWaypointPoiPoint()));
+            }
+        }
+
+    }
+
+
+    private static void handleSpeed(RoutePointReq routePointReq, KmlParams kmlParams, String fileType, KmlPlacemark kmlPlacemark) {
+        if (ObjectUtil.isNotEmpty(routePointReq.getSpeed())) {
+            if (StringUtils.equals(fileType, FileTypeConstants.KML)) {
+                kmlPlacemark.setUseGlobalSpeed("0");
+            }
+            kmlPlacemark.setWaypointSpeed(String.valueOf(routePointReq.getSpeed()));
+        } else {
+            if (StringUtils.equals(fileType, FileTypeConstants.KML)) {
+                kmlPlacemark.setUseGlobalSpeed("1");
+            } else if (StringUtils.equals(fileType, FileTypeConstants.WPML)) {
+                kmlPlacemark.setWaypointSpeed(String.valueOf(kmlParams.getAutoFlightSpeed()));
+            }
+        }
+    }
+
+    private static void handleHeight(RoutePointReq routePointReq, KmlParams kmlParams, String fileType, KmlPlacemark kmlPlacemark) {
         if (ObjectUtil.isNotEmpty(routePointReq.getHeight())) {
             if (StringUtils.equals(fileType, FileTypeConstants.KML)) {
                 kmlPlacemark.setUseGlobalHeight("0");
@@ -266,41 +339,6 @@ public class RouteFileUtils {
                 kmlPlacemark.setExecuteHeight(String.valueOf(kmlParams.getGlobalHeight()));
             }
         }
-
-        if (ObjectUtil.isNotEmpty(routePointReq.getSpeed())) {
-            kmlPlacemark.setUseGlobalSpeed("0");
-            kmlPlacemark.setWaypointSpeed(String.valueOf(routePointReq.getSpeed()));
-        } else {
-            kmlPlacemark.setUseGlobalSpeed("1");
-            kmlPlacemark.setWaypointSpeed(String.valueOf(kmlParams.getAutoFlightSpeed()));
-        }
-
-        if (ObjectUtil.isNotEmpty(routePointReq.getWaypointHeadingReq())) {
-            WaypointHeadingReq waypointHeadingReq = routePointReq.getWaypointHeadingReq();
-            kmlPlacemark.setUseGlobalHeadingParam("0");
-            kmlPlacemark.setWaypointHeadingParam(buildKmlWaypointHeadingParam(waypointHeadingReq.getWaypointHeadingMode(), waypointHeadingReq.getWaypointHeadingAngle(), waypointHeadingReq.getWaypointPoiPoint()));
-        } else {
-            kmlPlacemark.setUseGlobalHeadingParam("1");
-            kmlPlacemark.setWaypointHeadingParam(buildKmlWaypointHeadingParam(kmlParams.getWaypointHeadingMode(), kmlParams.getWaypointHeadingAngle(), kmlParams.getWaypointPoiPoint()));
-        }
-
-        if (ObjectUtil.isNotEmpty(routePointReq.getWaypointTurnReq())) {
-            kmlPlacemark.setUseGlobalTurnParam("0");
-            kmlPlacemark.setWaypointTurnParam(buildKmlWaypointTurnParam(routePointReq.getWaypointTurnReq().getWaypointTurnMode(), routePointReq.getWaypointTurnReq().getWaypointTurnDampingDist(), routePointReq.getWaypointTurnReq().getUseStraightLine()));
-            if (ObjectUtil.isNotEmpty(routePointReq.getWaypointTurnReq().getUseStraightLine())) {
-                kmlPlacemark.setUseStraightLine(String.valueOf(routePointReq.getWaypointTurnReq().getUseStraightLine()));
-            }
-        } else {
-            kmlPlacemark.setUseGlobalTurnParam("1");
-            kmlPlacemark.setWaypointTurnParam(buildKmlWaypointTurnParam(kmlParams.getGlobalWaypointTurnMode(), 0.0, 0));
-        }
-        if (ObjectUtil.isNotEmpty(routePointReq.getGimbalPitchAngle()) && StringUtils.equals(kmlParams.getGimbalPitchMode(), GimbalPitchModeEnums.USE_POINT_SETTING.getValue())) {
-            kmlPlacemark.setGimbalPitchAngle(String.valueOf(routePointReq.getGimbalPitchAngle()));
-        }
-        if (CollectionUtil.isNotEmpty(routePointReq.getActions())) {
-            kmlPlacemark.setActionGroup(buildKmlActionGroup(routePointReq, kmlParams));
-        }
-        return kmlPlacemark;
     }
 
     public static KmlPoint buildKmlPoint(String longitude, String latitude) {

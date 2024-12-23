@@ -1,6 +1,8 @@
 package com.cleaner.djuav.domain.kml;
 
 import com.cleaner.djuav.domain.RoutePointReq;
+import com.cleaner.djuav.domain.WaypointHeadingReq;
+import com.cleaner.djuav.domain.WaypointTurnReq;
 import lombok.Data;
 
 import java.util.List;
@@ -48,7 +50,7 @@ public class KmlParams {
     /**
      * 全局航点转弯模式
      */
-    private String globalWaypointTurnMode;
+    private WaypointTurnReq waypointTurnReq;
 
     /**
      * 全局航线高度
@@ -56,19 +58,9 @@ public class KmlParams {
     private Double globalHeight;
 
     /**
-     * 全局飞行器偏航角模式
+     * 全局偏航角模式
      */
-    private String waypointHeadingMode;
-
-    /**
-     * 全局飞行器偏航角度
-     */
-    private Double waypointHeadingAngle;
-
-    /**
-     * 兴趣点
-     */
-    private String waypointPoiPoint;
+    private WaypointHeadingReq waypointHeadingReq;
 
     /**
      * 云台俯仰角控制模式

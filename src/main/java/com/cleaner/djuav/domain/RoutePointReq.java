@@ -48,7 +48,6 @@ public class RoutePointReq implements Serializable {
      */
     private Double gimbalPitchAngle;
 
-
     /**
      * 航点动作列表
      */

@@ -27,8 +27,14 @@ import java.util.zip.ZipOutputStream;
  */
 public class RouteFileUtils {
 
+    /**
+     * XML 头部
+     */
     private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
+    /**
+     * 生成的本地 kmz 文件存储路径
+     */
     private static final String LOCAL_KMZ_FILE_PATH = "file" + File.separator + "kmz" + File.separator;
 
 
@@ -36,7 +42,7 @@ public class RouteFileUtils {
      * kml文件解析
      *
      * @param inputStream
-     * @return
+     * @return KmlInfo
      */
     public static KmlInfo parseKml(InputStream inputStream) {
         XStream xStream = new XStream();
@@ -50,7 +56,10 @@ public class RouteFileUtils {
     }
 
     /**
-     * 生成kmz文件
+     * 生成航线 KMZ 文件
+     * @param fileName 文件名
+     * @param kmlParams 参数对象
+     * @return  本地文件路径
      */
     public static String buildKmz(String fileName, KmlParams kmlParams) {
         KmlInfo kmlInfo = buildKml(kmlParams);
@@ -58,6 +67,13 @@ public class RouteFileUtils {
         return buildKmz(fileName, kmlInfo, wpmlInfo);
     }
 
+    /**
+     * 生成航线 KMZ 文件
+     * @param fileName  文件名
+     * @param kmlInfo   kml 文件信息
+     * @param wpmlInfo  wpml 文件信息
+     * @return  本地文件路径
+     */
     public static String buildKmz(String fileName, KmlInfo kmlInfo, KmlInfo wpmlInfo) {
         XStream xStream = new XStream(new DomDriver());
         xStream.processAnnotations(KmlInfo.class);

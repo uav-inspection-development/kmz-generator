@@ -119,6 +119,9 @@
 }
 ```
 
+## 计划
+1. 支持生成和解析建图航拍、倾斜摄影、航带飞行模板类型的 KMZ 文件。
+
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=SongJian-99/dj-uav&type=Date)](https://star-history.com/#SongJian-99/dj-uav&Date)

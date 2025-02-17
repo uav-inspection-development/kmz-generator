@@ -59,4 +59,73 @@ public class KmlPlacemark {
 //    @XStreamAlias("wpml:waypointGimbalHeadingParam")
 //    private KmlWaypointGimbalHeadingParam waypointGimbalHeadingParam;
 
+    // 建图航拍模板元素
+    @XStreamAlias("wpml:caliFlightEnable")
+    private String caliFlightEnable;
+
+    @XStreamAlias("wpml:elevationOptimizeEnable")
+    private String elevationOptimizeEnable;
+
+    @XStreamAlias("wpml:smartObliqueEnable")
+    private String smartObliqueEnable;
+
+    @XStreamAlias("wpml:smartObliqueGimbalPitch")
+    private String smartObliqueGimbalPitch;
+
+    @XStreamAlias("wpml:shootType")
+    private String shootType;
+
+    @XStreamAlias("wpml:direction")
+    private String direction;
+
+    @XStreamAlias("wpml:margin")
+    private String margin;
+
+    @XStreamAlias("wpml:overlap")
+    private KmlOverlap overlap;
+
+    @XStreamAlias("wpml:ovefacadeWaylineEnablerlap")
+    private String facadeWaylineEnable;
+
+    @XStreamAlias("Polygon")
+    private KmlPolygon polygon;
+
+    @XStreamAlias("wpml:mappingHeadingParam")
+    private KmlActionGroup mappingHeadingParam;
+
+    @XStreamAlias("wpml:gimbalPitchMode")
+    private String gimbalPitchMode;
+
+    // 倾斜摄影模板元素
+    @XStreamAlias("wpml:inclinedGimbalPitch")
+    private String inclinedGimbalPitch;
+
+    @XStreamAlias("wpml:inclinedFlightSpeed")
+    private String inclinedFlightSpeed;
+
+    // 航带飞行模板元素
+    @XStreamAlias("wpml:singleLineEnable")
+    private String singleLineEnable;
+
+    @XStreamAlias("wpml:cuttingDistance")
+    private String cuttingDistance;
+
+    @XStreamAlias("wpml:boundaryOptimEnable")
+    private String boundaryOptimEnable;
+
+    @XStreamAlias("wpml:leftExtend")
+    private String leftExtend;
+
+    @XStreamAlias("wpml:rightExtend")
+    private String rightExtend;
+
+    @XStreamAlias("wpml:includeCenterEnable")
+    private String includeCenterEnable;
+
+    @XStreamAlias("wpml:stripUseTemplateAltitude")
+    private String stripUseTemplateAltitude;
+
+    @XStreamAlias("LineString")
+    private KmlLineString lineString;
+
 }

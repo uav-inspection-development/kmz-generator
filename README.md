@@ -126,6 +126,71 @@
   ]
 }
 ```
+```json
+{
+    "templateType": "mapping2d",
+    "droneType": 91,
+    "subDroneType": 1,
+    "payloadType": 81,
+    "payloadPosition": 0,
+    "takeOffRefPoint": "36.250903,117.127300,811.761791",
+    "imageFormat": "ir,zoom",
+    "finishAction": "goHome",
+    "exitOnRcLostAction": "goBack",
+    "globalHeight": 100,
+    "autoFlightSpeed": 10,
+    "waypointHeadingReq": {
+        "waypointHeadingMode": "followWayline"
+    },
+    "waypointTurnReq": {
+        "waypointTurnMode": "toPointAndStopWithDiscontinuityCurvature"
+    },
+    "gimbalPitchMode": "usePointSetting",
+    // "routePointList": [
+    //     {
+    //         "routePointIndex": 1,
+    //         "longitude": 117.1092,
+    //         "latitude": 36.2607,
+    //         "actions": [
+    //             {
+    //                 "actionIndex": 1,
+    //                 "hoverTime": 10
+    //             },
+    //             {
+    //                 "actionIndex": 2,
+    //                 "zoom": 10
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "routePointIndex": 2,
+    //         "longitude": 117.1039,
+    //         "latitude": 36.2668
+    //     },
+    //     {
+    //         "routePointIndex": 3,
+    //         "longitude": 117.1278,
+    //         "latitude": 36.2351
+    //     }
+    // ],
+    "mappingTypeReq": {
+        "collectionMethod": "ortho",
+        "lensType": "camera",
+        "overlapH": 80,
+        "overlapW": 80,
+        "elevationOptimizeEnable": 1,
+        "shootType": "time",
+        "direction": 180,
+        "margin": 0,
+        "coordinates": [
+            "117.1273028841,36.250894331795,0",
+            "117.129237229051,36.2506462067269,0",
+            "117.127678906696,36.249653613718,0"
+        ]
+    }
+}
+
+```
 
 ## 计划
 1. 支持生成和解析建图航拍、倾斜摄影、航带飞行模板类型的 KMZ 文件。

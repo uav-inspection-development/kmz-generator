@@ -53,4 +53,11 @@ public class RoutePointReq implements Serializable {
      */
     private List<PointActionReq> actions;
 
+
+    /**
+     * 航点动作触发
+     */
+    private ActionTriggerReq actionTriggerReq;
+
+
 }

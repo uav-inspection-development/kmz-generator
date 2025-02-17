@@ -4,10 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.cleaner.djuav.constant.FileTypeConstants;
-import com.cleaner.djuav.domain.PointActionReq;
-import com.cleaner.djuav.domain.RoutePointReq;
-import com.cleaner.djuav.domain.WaypointHeadingReq;
-import com.cleaner.djuav.domain.WaypointTurnReq;
+import com.cleaner.djuav.domain.*;
 import com.cleaner.djuav.domain.kml.*;
 import com.cleaner.djuav.enums.kml.*;
 import com.thoughtworks.xstream.XStream;
@@ -19,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -57,9 +55,10 @@ public class RouteFileUtils {
 
     /**
      * 生成航线 KMZ 文件
-     * @param fileName 文件名
+     *
+     * @param fileName  文件名
      * @param kmlParams 参数对象
-     * @return  本地文件路径
+     * @return 本地文件路径
      */
     public static String buildKmz(String fileName, KmlParams kmlParams) {
         KmlInfo kmlInfo = buildKml(kmlParams);
@@ -69,10 +68,11 @@ public class RouteFileUtils {
 
     /**
      * 生成航线 KMZ 文件
-     * @param fileName  文件名
-     * @param kmlInfo   kml 文件信息
-     * @param wpmlInfo  wpml 文件信息
-     * @return  本地文件路径
+     *
+     * @param fileName 文件名
+     * @param kmlInfo  kml 文件信息
+     * @param wpmlInfo wpml 文件信息
+     * @return 本地文件路径
      */
     public static String buildKmz(String fileName, KmlInfo kmlInfo, KmlInfo wpmlInfo) {
         XStream xStream = new XStream(new DomDriver());
@@ -150,8 +150,7 @@ public class RouteFileUtils {
         kmlMissionConfig.setTakeOffSecurityHeight("20");
         kmlMissionConfig.setGlobalTransitionalSpeed("15");
         kmlMissionConfig.setGlobalRTHHeight("100");
-        // TODO 参考起飞点配置
-//        kmlMissionConfig.setTakeOffRefPoint(kmlParams.getTakeOffRefPoint());
+        kmlMissionConfig.setTakeOffRefPoint(kmlParams.getTakeOffRefPoint());
         kmlMissionConfig.setDroneInfo(buildKmlDroneInfo(kmlParams.getDroneType(), kmlParams.getSubDroneType()));
         kmlMissionConfig.setPayloadInfo(buildKmlPayloadInfo(kmlParams.getPayloadType(), kmlParams.getPayloadPosition()));
         return kmlMissionConfig;
@@ -182,7 +181,7 @@ public class RouteFileUtils {
         kmlFolder.setTemplateId("0");
         kmlFolder.setAutoFlightSpeed(String.valueOf(kmlParams.getAutoFlightSpeed()));
         if (StringUtils.equals(fileType, FileTypeConstants.KML)) {
-            kmlFolder.setTemplateType(TemplateTypeEnums.WAYPOINT.getValue());
+            kmlFolder.setTemplateType(kmlParams.getTemplateType());
             kmlFolder.setWaylineCoordinateSysParam(buildKmlWayLineCoordinateSysParam(TemplateTypeEnums.WAYPOINT.getValue()));
             kmlFolder.setPayloadParam(buildKmlPayloadParam(kmlParams));
         }
@@ -203,18 +202,41 @@ public class RouteFileUtils {
             kmlFolder.setGlobalHeight(String.valueOf(kmlParams.getGlobalHeight()));
             WaypointHeadingReq waypointHeadingReq = kmlParams.getWaypointHeadingReq();
             kmlFolder.setGlobalWaypointHeadingParam(buildKmlGlobalWaypointHeadingParam(waypointHeadingReq.getWaypointHeadingMode(), waypointHeadingReq.getWaypointHeadingAngle(), waypointHeadingReq.getWaypointPoiPoint()));
-        }
-        // 构建航点
-        List<RoutePointReq> routePointList = kmlParams.getRoutePointList();
-        if (CollectionUtil.isNotEmpty(routePointList)) {
-            List<KmlPlacemark> kmlPlacemarkList = new ArrayList<>();
-            for (RoutePointReq routePointReq : routePointList) {
-                kmlPlacemarkList.add(buildKmlPlacemark(routePointReq, kmlParams, fileType));
+            // 构建航点
+            List<RoutePointReq> routePointList = kmlParams.getRoutePointList();
+            if (CollectionUtil.isNotEmpty(routePointList)) {
+                List<KmlPlacemark> kmlPlacemarkList = new ArrayList<>();
+                for (RoutePointReq routePointReq : routePointList) {
+                    kmlPlacemarkList.add(buildKmlPlacemark(routePointReq, kmlParams, fileType));
+                }
+                kmlFolder.setPlacemarkList(kmlPlacemarkList);
             }
-            kmlFolder.setPlacemarkList(kmlPlacemarkList);
+        } else {
+            if (StringUtils.equals(fileType, FileTypeConstants.KML)) {
+                List<KmlPlacemark> kmlPlacemarkList = new ArrayList<>();
+                kmlPlacemarkList.add(buildMappingKmlPlacemark(kmlParams));
+                kmlFolder.setPlacemarkList(kmlPlacemarkList);
+            } else {
+                // 构建航点
+                List<RoutePointReq> routePointList = kmlParams.getRoutePointList();
+                if (CollectionUtil.isNotEmpty(routePointList)) {
+                    List<KmlPlacemark> kmlPlacemarkList = new ArrayList<>();
+                    for (RoutePointReq routePointReq : routePointList) {
+                        ActionTriggerReq actionTriggerReq = new ActionTriggerReq();
+                        actionTriggerReq.setActionTriggerType(StringUtils.equals(kmlParams.getMappingTypeReq().getShootType(), ShootTypeEnums.TIME.getValue()) ?
+                                ActionTriggerTypeEnums.MULTIPLE_TIMING.getValue() :
+                                ActionTriggerTypeEnums.MULTIPLE_DISTANCE.getValue());
+                        actionTriggerReq.setActionTriggerParam(2.0);
+                        routePointReq.setActionTriggerReq(actionTriggerReq);
+                        kmlPlacemarkList.add(buildKmlPlacemark(routePointReq, kmlParams, fileType));
+                    }
+                    kmlFolder.setPlacemarkList(kmlPlacemarkList);
+                }
+            }
         }
         return kmlFolder;
     }
+
 
     public static KmlWayLineCoordinateSysParam buildKmlWayLineCoordinateSysParam(String templateType) {
         KmlWayLineCoordinateSysParam kmlWayLineCoordinateSysParam = new KmlWayLineCoordinateSysParam();
@@ -282,6 +304,58 @@ public class RouteFileUtils {
             kmlPlacemark.setActionGroup(buildKmlActionGroup(routePointReq, kmlParams));
         }
         return kmlPlacemark;
+    }
+
+    private static KmlPlacemark buildMappingKmlPlacemark(KmlParams kmlParams) {
+        KmlPlacemark kmlPlacemark = new KmlPlacemark();
+        MappingTypeReq mappingTypeReq = kmlParams.getMappingTypeReq();
+        kmlPlacemark.setCaliFlightEnable("0");
+        kmlPlacemark.setElevationOptimizeEnable(String.valueOf(mappingTypeReq.getElevationOptimizeEnable()));
+        kmlPlacemark.setSmartObliqueEnable("0");
+        kmlPlacemark.setShootType(mappingTypeReq.getShootType());
+        kmlPlacemark.setDirection(mappingTypeReq.getDirection());
+        kmlPlacemark.setMargin(mappingTypeReq.getMargin());
+        kmlPlacemark.setOverlap(buildKmlOverlap(mappingTypeReq.getCollectionMethod(), mappingTypeReq.getLensType(), mappingTypeReq.getOverlapH(), mappingTypeReq.getOverlapW()));
+        kmlPlacemark.setEllipsoidHeight(String.valueOf(kmlParams.getGlobalHeight()));
+        kmlPlacemark.setHeight(String.valueOf(kmlParams.getGlobalHeight()));
+        kmlPlacemark.setFacadeWaylineEnable("0");
+        kmlPlacemark.setPolygon(buildKmlPolygon(mappingTypeReq.getCoordinates()));
+        return kmlPlacemark;
+    }
+
+    private static KmlOverlap buildKmlOverlap(String collectionMethod, String lensType, Integer overlapH, Integer overlapW) {
+        KmlOverlap overlap = new KmlOverlap();
+        if (StringUtils.equals(collectionMethod, CollectionMethodEnums.ORTHO.getValue())) {
+            if (StringUtils.equals(lensType, LensTypeEnums.LIDAR.getValue())) {
+                overlap.setOrthoLidarOverlapH(String.valueOf(overlapH));
+                overlap.setOrthoLidarOverlapW(String.valueOf(overlapW));
+            } else {
+                overlap.setOrthoCameraOverlapH(String.valueOf(overlapH));
+                overlap.setOrthoCameraOverlapW(String.valueOf(overlapW));
+            }
+        } else {
+            if (StringUtils.equals(lensType, LensTypeEnums.LIDAR.getValue())) {
+                overlap.setInclinedLidarOverlapH(String.valueOf(overlapH));
+                overlap.setInclinedCameraOverlapW(String.valueOf(overlapW));
+            } else {
+                overlap.setInclinedCameraOverlapH(String.valueOf(overlapH));
+                overlap.setInclinedCameraOverlapW(String.valueOf(overlapW));
+            }
+        }
+        return overlap;
+    }
+
+    private static KmlPolygon buildKmlPolygon(List<CoordinatePointReq> coordinatePointReqList) {
+        KmlPolygon kmlPolygon = new KmlPolygon();
+        KmlLinearRing kmlLinearRing = new KmlLinearRing();
+
+        String coordinates = coordinatePointReqList.stream().map(point -> point.getLongitude() + "," + point.getLatitude() + "," + point.getHeight())
+                .collect(Collectors.joining(", "));
+        kmlLinearRing.setCoordinates(StringUtils.join(coordinates, " "));
+        KmlOuterBoundaryIs kmlOuterBoundaryIs = new KmlOuterBoundaryIs();
+        kmlOuterBoundaryIs.setLinearRing(kmlLinearRing);
+        kmlPolygon.setOuterBoundaryIs(kmlOuterBoundaryIs);
+        return kmlPolygon;
     }
 
     private static void handleWaypointTurnParam(RoutePointReq routePointReq, KmlParams kmlParams, String fileType, KmlPlacemark kmlPlacemark) {
@@ -393,7 +467,7 @@ public class RouteFileUtils {
         kmlActionGroup.setActionGroupStartIndex("0");
         kmlActionGroup.setActionGroupEndIndex("0");
         kmlActionGroup.setActionGroupMode(ActionGroupModeEnums.SEQUENCE.getValue());
-        kmlActionGroup.setActionTrigger(buildKmlActionTrigger());
+        kmlActionGroup.setActionTrigger(buildKmlActionTrigger(routePointReq.getActionTriggerReq()));
         List<KmlAction> kmlActionList = new ArrayList<>();
         for (PointActionReq pointActionReq : routePointReq.getActions()) {
             if (ObjectUtil.isNotNull(pointActionReq.getHoverTime())) {
@@ -412,9 +486,13 @@ public class RouteFileUtils {
         return kmlActionGroup;
     }
 
-    public static KmlActionTrigger buildKmlActionTrigger() {
+    public static KmlActionTrigger buildKmlActionTrigger(ActionTriggerReq actionTriggerReq) {
         KmlActionTrigger kmlActionTrigger = new KmlActionTrigger();
-        kmlActionTrigger.setActionTriggerType(ActionTriggerTypeEnums.REACH_POINT.getValue());
+        kmlActionTrigger.setActionTriggerType(actionTriggerReq.getActionTriggerType());
+        if (StringUtils.equals(actionTriggerReq.getActionTriggerType(), ActionTriggerTypeEnums.MULTIPLE_TIMING.getValue()) ||
+                StringUtils.equals(actionTriggerReq.getActionTriggerType(), ActionTriggerTypeEnums.MULTIPLE_DISTANCE.getValue())) {
+            kmlActionTrigger.setActionTriggerParam(String.valueOf(actionTriggerReq.getActionTriggerParam()));
+        }
         return kmlActionTrigger;
     }
 

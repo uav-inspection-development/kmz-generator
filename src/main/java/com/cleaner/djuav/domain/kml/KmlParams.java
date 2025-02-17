@@ -1,8 +1,6 @@
 package com.cleaner.djuav.domain.kml;
 
-import com.cleaner.djuav.domain.RoutePointReq;
-import com.cleaner.djuav.domain.WaypointHeadingReq;
-import com.cleaner.djuav.domain.WaypointTurnReq;
+import com.cleaner.djuav.domain.*;
 import lombok.Data;
 
 import java.util.List;
@@ -12,6 +10,12 @@ import java.util.List;
  */
 @Data
 public class KmlParams {
+
+    /**
+     * 航线类型
+     */
+    private String templateType;
+
     /**
      * 无人机类型
      */
@@ -42,10 +46,10 @@ public class KmlParams {
      */
     private String exitOnRcLostAction;
 
-//    /**
-//     * 参考起飞点
-//     */
-//    private String takeOffRefPoint;
+    /**
+     * 参考起飞点
+     */
+    private String takeOffRefPoint;
 
     /**
      * 全局航点转弯模式
@@ -81,5 +85,13 @@ public class KmlParams {
      * 航点列表
      */
     private List<RoutePointReq> routePointList;
+
+    /**
+     * 建图航拍、倾斜摄影、航带飞行模板参数
+     */
+    private MappingTypeReq mappingTypeReq;
+
+
+
 }
 

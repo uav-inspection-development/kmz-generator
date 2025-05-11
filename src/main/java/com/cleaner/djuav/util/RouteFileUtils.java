@@ -360,20 +360,22 @@ public class RouteFileUtils {
 
     private static void handleWaypointTurnParam(RoutePointReq routePointReq, KmlParams kmlParams, String fileType, KmlPlacemark kmlPlacemark) {
         WaypointTurnReq waypointTurnReq = routePointReq.getWaypointTurnReq();
+        // 使用全局航点转弯模式
         if (ObjectUtil.isNotEmpty(waypointTurnReq)) {
             if (StringUtils.equals(fileType, FileTypeConstants.KML)) {
                 kmlPlacemark.setUseGlobalTurnParam("0");
             }
-            kmlPlacemark.setWaypointTurnParam(buildKmlWaypointTurnParam(waypointTurnReq.getWaypointTurnMode(), waypointTurnReq.getWaypointTurnDampingDist(), waypointTurnReq.getUseStraightLine()));
+            kmlPlacemark.setWaypointTurnParam(buildKmlWaypointTurnParam(waypointTurnReq.getWaypointTurnMode(), waypointTurnReq.getWaypointTurnDampingDist(), waypointTurnReq.getUseStraightLine(), routePointReq.getIsStartAndEndPoint()));
             if (ObjectUtil.isNotEmpty(waypointTurnReq.getUseStraightLine())) {
                 kmlPlacemark.setUseStraightLine(String.valueOf(waypointTurnReq.getUseStraightLine()));
             }
         } else {
+            // 使用自定义航点转弯模式
             if (StringUtils.equals(fileType, FileTypeConstants.KML)) {
                 kmlPlacemark.setUseGlobalTurnParam("1");
             } else if (StringUtils.equals(fileType, FileTypeConstants.WPML)) {
                 WaypointTurnReq globalWaypoint = kmlParams.getWaypointTurnReq();
-                kmlPlacemark.setWaypointTurnParam(buildKmlWaypointTurnParam(globalWaypoint.getWaypointTurnMode(), globalWaypoint.getWaypointTurnDampingDist(), globalWaypoint.getUseStraightLine()));
+                kmlPlacemark.setWaypointTurnParam(buildKmlWaypointTurnParam(globalWaypoint.getWaypointTurnMode(), globalWaypoint.getWaypointTurnDampingDist(), globalWaypoint.getUseStraightLine(), routePointReq.getIsStartAndEndPoint()));
             }
         }
     }
@@ -449,9 +451,14 @@ public class RouteFileUtils {
         return kmlWaypointHeadingParam;
     }
 
-    public static KmlWaypointTurnParam buildKmlWaypointTurnParam(String waypointTurnMode, Double waypointTurnDampingDist, Integer useStraightLine) {
+    public static KmlWaypointTurnParam buildKmlWaypointTurnParam(String waypointTurnMode, Double waypointTurnDampingDist, Integer useStraightLine, Boolean startAndEndPoint) {
         KmlWaypointTurnParam kmlWaypointTurnParam = new KmlWaypointTurnParam();
-        kmlWaypointTurnParam.setWaypointTurnMode(waypointTurnMode);
+        // 首尾航点不能是协调转弯类型
+        if (startAndEndPoint && StringUtils.equals(waypointTurnMode, GlobalWaypointTurnModeEnums.COORDINATE_TURN.getValue())) {
+            kmlWaypointTurnParam.setWaypointTurnMode(GlobalWaypointTurnModeEnums.TO_POINT_AND_STOP_WITH_DISCONTINUITY_CURVATURE.getValue());
+        } else {
+            kmlWaypointTurnParam.setWaypointTurnMode(waypointTurnMode);
+        }
         if (StringUtils.equals(waypointTurnMode, GlobalWaypointTurnModeEnums.COORDINATE_TURN.getValue()) ||
                 (StringUtils.equals(waypointTurnMode, GlobalWaypointTurnModeEnums.TO_POINT_AND_PASS_WITH_CONTINUITY_CURVATURE.getValue()) &&
                         ObjectUtil.equals(useStraightLine, 1))) {

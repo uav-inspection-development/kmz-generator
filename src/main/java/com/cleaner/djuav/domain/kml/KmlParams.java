@@ -93,5 +93,6 @@ public class KmlParams {
 
 
 
+    private List<RoutePointInfo> routePointList;
 }
 

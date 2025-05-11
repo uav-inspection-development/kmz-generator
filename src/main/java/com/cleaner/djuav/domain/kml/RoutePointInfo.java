@@ -1,12 +1,15 @@
-package com.cleaner.djuav.domain;
+package com.cleaner.djuav.domain.kml;
 
+import com.cleaner.djuav.domain.PointActionReq;
+import com.cleaner.djuav.domain.WaypointHeadingReq;
+import com.cleaner.djuav.domain.WaypointTurnReq;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class RoutePointReq implements Serializable {
+public class RoutePointInfo implements Serializable {
 
     /**
      * 航点编号
@@ -53,12 +56,10 @@ public class RoutePointReq implements Serializable {
      */
     private List<PointActionReq> actions;
 
-
     /**
-     * 航点动作触发
+     * 是否首尾航点（首尾航点不能是协调转弯类型）
      */
-    private ActionTriggerReq actionTriggerReq;
-
+    private Boolean isStartAndEndPoint = false;
 
     /**
      * 等时拍照间隔时间 单位s

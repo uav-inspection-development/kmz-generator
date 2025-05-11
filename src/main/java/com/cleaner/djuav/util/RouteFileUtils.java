@@ -5,9 +5,6 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.cleaner.djuav.constant.FileTypeConstants;
 import com.cleaner.djuav.domain.*;
-import com.cleaner.djuav.domain.PointActionReq;
-import com.cleaner.djuav.domain.WaypointHeadingReq;
-import com.cleaner.djuav.domain.WaypointTurnReq;
 import com.cleaner.djuav.domain.kml.*;
 import com.cleaner.djuav.enums.kml.*;
 import com.thoughtworks.xstream.XStream;
@@ -207,7 +204,6 @@ public class RouteFileUtils {
             WaypointHeadingReq waypointHeadingReq = kmlParams.getWaypointHeadingReq();
             kmlFolder.setGlobalWaypointHeadingParam(buildKmlGlobalWaypointHeadingParam(waypointHeadingReq.getWaypointHeadingMode(), waypointHeadingReq.getWaypointHeadingAngle(), waypointHeadingReq.getWaypointPoiPoint()));
             // 构建航点
-            // 构建航点
             List<RoutePointInfo> routePointList = kmlParams.getRoutePointList();
             if (CollectionUtil.isNotEmpty(routePointList)) {
                 routePointList.stream()
@@ -230,17 +226,17 @@ public class RouteFileUtils {
                 kmlFolder.setPlacemarkList(kmlPlacemarkList);
             } else {
                 // 构建航点
-                List<RoutePointReq> routePointList = kmlParams.getRoutePointList();
+                List<RoutePointInfo> routePointList = kmlParams.getRoutePointList();
                 if (CollectionUtil.isNotEmpty(routePointList)) {
                     List<KmlPlacemark> kmlPlacemarkList = new ArrayList<>();
-                    for (RoutePointReq routePointReq : routePointList) {
-                        ActionTriggerReq actionTriggerReq = new ActionTriggerReq();
-                        actionTriggerReq.setActionTriggerType(StringUtils.equals(kmlParams.getMappingTypeReq().getShootType(), ShootTypeEnums.TIME.getValue()) ?
-                                ActionTriggerTypeEnums.MULTIPLE_TIMING.getValue() :
-                                ActionTriggerTypeEnums.MULTIPLE_DISTANCE.getValue());
-                        actionTriggerReq.setActionTriggerParam(2.0);
-                        routePointReq.setActionTriggerReq(actionTriggerReq);
-                        kmlPlacemarkList.add(buildKmlPlacemark(routePointReq, kmlParams, fileType));
+                    for (RoutePointInfo routePointInfo : routePointList) {
+//                        ActionTriggerReq actionTriggerReq = new ActionTriggerReq();
+//                        actionTriggerReq.setActionTriggerType(StringUtils.equals(kmlParams.getMappingTypeReq().getShootType(), ShootTypeEnums.TIME.getValue()) ?
+//                                ActionTriggerTypeEnums.MULTIPLE_TIMING.getValue() :
+//                                ActionTriggerTypeEnums.MULTIPLE_DISTANCE.getValue());
+//                        actionTriggerReq.setActionTriggerParam(2.0);
+//                        RoutePointInfo.setActionTriggerReq(actionTriggerReq);
+                        kmlPlacemarkList.add(buildKmlPlacemark(routePointInfo, kmlParams, fileType));
                     }
                     kmlFolder.setPlacemarkList(kmlPlacemarkList);
                 }

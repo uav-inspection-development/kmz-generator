@@ -1,6 +1,8 @@
 package com.cleaner.djuav.domain.kml;
 
-import com.cleaner.djuav.domain.*;
+import com.cleaner.djuav.domain.MappingTypeReq;
+import com.cleaner.djuav.domain.WaypointHeadingReq;
+import com.cleaner.djuav.domain.WaypointTurnReq;
 import lombok.Data;
 
 import java.util.List;
@@ -81,16 +83,11 @@ public class KmlParams {
      */
     private String imageFormat;
 
-    /**
-     * 航点列表
-     */
-    private List<RoutePointReq> routePointList;
 
     /**
      * 建图航拍、倾斜摄影、航带飞行模板参数
      */
     private MappingTypeReq mappingTypeReq;
-
 
 
     private List<RoutePointInfo> routePointList;

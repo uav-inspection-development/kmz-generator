@@ -1,5 +1,23 @@
 # KMZ Generator for DJI UAV
 
+## How to run
+
+```pwsh
+ .\mvnw.cmd spring-boot:run
+```
+or
+
+```bash
+./mvnw spring-boot:run
+```
+
+The app will be available at port 7777.
+
+The principal endpoint is: `/buildKmz` which takes a POST request with the JSON as payload.
+
+The generated KMZ file will be available at the `/file/航线kmz文件.kmz`.
+
+
 ## 实现效果
 
 ### KMZ 文件结构

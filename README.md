@@ -138,8 +138,24 @@ The generated KMZ file will be available at the `/file/航线kmz文件.kmz`.
           "useGlobalImageFormat": 1
         },
         {
-          "actionIndex": 0,
+          "actionIndex": 1,
           "stopRecord": true
+        }
+      ]
+    },
+    {
+      "routePointIndex": 4,
+      "longitude": 115.9471013661498,
+      "latitude": 39.0252061309485,
+      "isStartAndEndPoint": true,
+      "actions": [
+        {
+          "actionIndex": 0,
+          "aircraftHeading": 180
+        },
+        {
+          "actionIndex": 1,
+          "gimbalPitchRotateAngle": 30
         }
       ]
     }
@@ -222,15 +238,27 @@ The generated KMZ file will be available at the `/file/航线kmz文件.kmz`.
           "useGlobalImageFormat": 1
         },
         {
-          "actionIndex": 0,
+          "actionIndex": 1,
           "stopRecord": true
+        }
+      ]
+    },
+    {
+      "routePointIndex": 4,
+      "longitude": 115.9471013661498,
+      "latitude": 39.0252061309485,
+      "isStartAndEndPoint": true,
+      "actions": [
+        {
+          "actionIndex": 0,
+          "aircraftHeading": 180
+        },
+        {
+          "actionIndex": 1,
+          "gimbalPitchRotateAngle": 30
         }
       ]
     }
   ]
 }
 ```
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=SongJian-99/dj-uav&type=Date)](https://star-history.com/#SongJian-99/dj-uav&Date)
